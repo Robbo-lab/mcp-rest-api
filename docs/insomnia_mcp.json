@@ -1,0 +1,127 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-01-28T00:00:00.000Z",
+  "__export_source": "codex-generated",
+  "resources": [
+    {
+      "_id": "wrk_mcp_fastapi",
+      "_type": "workspace",
+      "name": "MCP FastAPI Starter",
+      "description": "REST + MCP requests from README"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_mcp_fastapi",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://127.0.0.1:8000"
+      }
+    },
+    {
+      "_id": "fld_rest",
+      "_type": "request_group",
+      "parentId": "wrk_mcp_fastapi",
+      "name": "REST"
+    },
+    {
+      "_id": "req_health",
+      "_type": "request",
+      "parentId": "fld_rest",
+      "name": "Health",
+      "method": "GET",
+      "url": "{{ _.base_url }}/health"
+    },
+    {
+      "_id": "fld_mcp",
+      "_type": "request_group",
+      "parentId": "wrk_mcp_fastapi",
+      "name": "MCP"
+    },
+    {
+      "_id": "req_init",
+      "_type": "request",
+      "parentId": "fld_mcp",
+      "name": "Initialize",
+      "method": "POST",
+      "url": "{{ _.base_url }}/mcp/",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 1,\n  \"method\": \"initialize\",\n  \"params\": {\n    \"protocolVersion\": \"2025-11-25\",\n    \"capabilities\": {},\n    \"clientInfo\": { \"name\": \"insomnia\", \"version\": \"1.0\" }\n  }\n}"
+      },
+      "headers": [
+        { "name": "Accept", "value": "application/json, text/event-stream" },
+        { "name": "Content-Type", "value": "application/json" }
+      ]
+    },
+    {
+      "_id": "req_initialized",
+      "_type": "request",
+      "parentId": "fld_mcp",
+      "name": "notifications/initialized",
+      "method": "POST",
+      "url": "{{ _.base_url }}/mcp/",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"jsonrpc\": \"2.0\",\n  \"method\": \"notifications/initialized\",\n  \"params\": {}\n}"
+      },
+      "headers": [
+        { "name": "Accept", "value": "application/json, text/event-stream" },
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Mcp-Session-Id", "value": "{{ response.req_init.headers.Mcp-Session-Id }}" }
+      ]
+    },
+    {
+      "_id": "req_list_tools",
+      "_type": "request",
+      "parentId": "fld_mcp",
+      "name": "tools/list",
+      "method": "POST",
+      "url": "{{ _.base_url }}/mcp/",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 2,\n  \"method\": \"tools/list\",\n  \"params\": {}\n}"
+      },
+      "headers": [
+        { "name": "Accept", "value": "application/json, text/event-stream" },
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Mcp-Session-Id", "value": "{{ response.req_init.headers.Mcp-Session-Id }}" }
+      ]
+    },
+    {
+      "_id": "req_call_echo",
+      "_type": "request",
+      "parentId": "fld_mcp",
+      "name": "tools/call (echo)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/mcp/",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 3,\n  \"method\": \"tools/call\",\n  \"params\": {\n    \"name\": \"echo\",\n    \"arguments\": { \"text\": \"Hello from Insomnia\" }\n  }\n}"
+      },
+      "headers": [
+        { "name": "Accept", "value": "application/json, text/event-stream" },
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Mcp-Session-Id", "value": "{{ response.req_init.headers.Mcp-Session-Id }}" }
+      ]
+    },
+    {
+      "_id": "req_call_add",
+      "_type": "request",
+      "parentId": "fld_mcp",
+      "name": "tools/call (add)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/mcp/",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 4,\n  \"method\": \"tools/call\",\n  \"params\": {\n    \"name\": \"add\",\n    \"arguments\": { \"a\": 2, \"b\": 3 }\n  }\n}"
+      },
+      "headers": [
+        { "name": "Accept", "value": "application/json, text/event-stream" },
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Mcp-Session-Id", "value": "{{ response.req_init.headers.Mcp-Session-Id }}" }
+      ]
+    }
+  ]
+}
